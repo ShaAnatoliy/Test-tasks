@@ -1,0 +1,62 @@
+﻿<Window x:Class="WordsCount.MainWindow" x:Name="mainWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WordsCount"
+        RenderOptions.BitmapScalingMode="Fant" ShowInTaskbar="True"
+        WindowStartupLocation="CenterScreen" Icon="/WordsCount;component/Resources/favicon.ico"
+        Title="Подсчёт слов" Height="500" Width="580">
+
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/WordsCount;component/Styles.xaml" />
+    </Window.Resources>
+
+    <Window.DataContext >
+        <local:MainWinVM/>
+    </Window.DataContext>
+
+    <DockPanel LastChildFill="True" >
+        <ToolBarTray DockPanel.Dock="Top" Orientation="Horizontal">
+            <ToolBar>
+                <Button ToolTip="Открыть папку с файлами" BorderThickness="{Binding Path=BorderThick}" BorderBrush="Silver" 
+                    Margin="15,0,0,0" IsEnabled="{Binding Path=EnableButtons}"
+                    Command="{Binding Path=OpenFolderCmd}"  
+                    Content="{StaticResource OpenDirFiles}" />
+                <Button ToolTip="Запуск подсчёта слов" BorderThickness="{Binding Path=BorderThick}" BorderBrush="Silver"
+                    Margin="15,0,0,0" IsEnabled="{Binding Path=EnableButtons}"
+                    Command="{Binding Path=StartCountCmd}"  
+                    Content="{StaticResource StartCountIcon}" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left">
+            <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="Путь:" HorizontalContentAlignment="Right" Width="40"/>
+                <TextBlock MinWidth="530" Text="{Binding Path=OpenDir}" Background="#FFF7F7F7" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label Content="Количество символов в слове больше чем:" />
+                <TextBox MinWidth="50" VerticalAlignment="Center"
+                         Text="{Binding Path=CountCharsInWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock MinWidth="560" Text="{Binding Path=ShowMessage}"/>
+            </StackPanel>
+            <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+
+            <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+                <ListView Margin="10" ItemsSource="{Binding Path=TopNnWords}" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Word}" Header="Слово" Width="200"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Count}" Header="Количество" Width="100"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>
+        </StackPanel>
+    </DockPanel>
+
+</Window>
